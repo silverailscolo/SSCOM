@@ -3,7 +3,7 @@
     <div class="page-lift">
       <div>
         <n-form label-placement="left" size="small" label-width="60px">
-          <n-form-item label="串口">
+          <n-form-item label={{ $t('label.l1') }}>
             <n-select v-model:value="settings.serialPort" :options="settings.derives" placeholder="选择串口"
                       :consistent-menu-width="false" @click="getSerialPort()"
                       clearable :disabled="settings.serialPortOpened"></n-select>
