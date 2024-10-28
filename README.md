@@ -1,7 +1,7 @@
 # 专门为 Mac OS 打造的串口调试助手
 <img src="https://s1.ax1x.com/2022/12/09/zRmYUs.png" width="100" height="100"/>
 
-基于：`Javascript`、`Electron`、`Vue3`、`Vue-cli 5`
+基于：`Javascript`、`Electron`、`Vue3`、`electron-vite`
 
 macOS 的串口调试助手，有开源的，也有免费的，但都多多少少让人有点用着不爽，据我使用过的一些支持macOS的串口调试助手来看，它们存在一些令我难以接受的问题：
 1. 界面不太美观（不符合我的审美～）

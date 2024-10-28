@@ -66,13 +66,11 @@ import {
 } from 'naive-ui'
 import HelloWorld from './components/HelloWorld.vue'
 import OtherAbility from './components/OtherAbility.vue'
-import {computed, reactive} from 'vue';
-import {ipcRenderer} from 'electron';
-import hljs from 'highlight.js/lib/core'
-import c from 'highlight.js/lib/languages/c'
+import {computed, reactive} from 'vue'
+import {ipcRenderer} from 'electron'
 
-hljs.registerLanguage('c', c)
-
+const hljs = require('highlight.js/lib/core')
+hljs.registerLanguage('c', require('highlight.js/lib/languages/c'))
 
 const lightThemeOverrides = {
   common: {
