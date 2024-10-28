@@ -4,53 +4,84 @@
       <div>
         <n-form label-placement="left" size="small" label-width="60px">
           <n-form-item label="Start">
-            <n-select v-model:value="settings.serialPort" :options="settings.derives" placeholder="选择串口"
-                      :consistent-menu-width="false" @click="getSerialPort()"
-                      clearable :disabled="settings.serialPortOpened"></n-select>
+            <n-select
+              v-model:value="settings.serialPort"
+              :options="settings.derives"
+              placeholder="选择串口"
+              :consistent-menu-width="false"
+              @click="getSerialPort()"
+              clearable
+              :disabled="settings.serialPortOpened"
+            ></n-select>
           </n-form-item>
           <n-form-item label="波特率">
-            <n-select v-model:value="settings.baudRate" :options="settings.BaudRateOptions"
-                      placeholder="选择波特率" clearable :disabled="settings.serialPortOpened"></n-select>
+            <n-select
+              v-model:value="settings.baudRate"
+              :options="settings.BaudRateOptions"
+              placeholder="选择波特率"
+              clearable
+              :disabled="settings.serialPortOpened"
+            ></n-select>
           </n-form-item>
           <n-form-item label="校验位">
-            <n-select v-model:value="settings.parity" :options="settings.parityOptions"
-                      placeholder="选择校验位" clearable :disabled="settings.serialPortOpened"></n-select>
+            <n-select
+              v-model:value="settings.parity"
+              :options="settings.parityOptions"
+              placeholder="选择校验位"
+              clearable
+              :disabled="settings.serialPortOpened"
+            ></n-select>
           </n-form-item>
           <n-form-item label="停止位">
-            <n-select v-model:value="settings.stopBits" :options="settings.stopBitsOptions" placeholder="选择停止位"
-                      clearable :disabled="settings.serialPortOpened"></n-select>
+            <n-select
+              v-model:value="settings.stopBits"
+              :options="settings.stopBitsOptions"
+              placeholder="选择停止位"
+              clearable
+              :disabled="settings.serialPortOpened"
+            ></n-select>
           </n-form-item>
           <n-form-item label="数据位">
-            <n-select v-model:value="settings.dataBits" :options="settings.dataBitsOptions" placeholder="选择数据位"
-                      clearable :disabled="settings.serialPortOpened"></n-select>
+            <n-select
+              v-model:value="settings.dataBits"
+              :options="settings.dataBitsOptions"
+              placeholder="选择数据位"
+              clearable
+              :disabled="settings.serialPortOpened"
+            ></n-select>
           </n-form-item>
-          <div style="width: 100%;text-align: center">
-            <n-button style="width: 80%" ghost :type="settings.serialPortOpened?'error':'primary'"
-                      :disabled="!openSerialPortAllow" @click="openSerialPort">
-              {{ settings.serialPortOpened ? '关闭' : '打开' }}
+          <div style="width: 100%; text-align: center">
+            <n-button
+              style="width: 80%"
+              ghost
+              :type="settings.serialPortOpened ? 'error' : 'primary'"
+              :disabled="!openSerialPortAllow"
+              @click="openSerialPort"
+            >
+              {{ settings.serialPortOpened ? "关闭" : "打开" }}
             </n-button>
           </div>
         </n-form>
       </div>
       <div>
         <n-upload
-            action="https://naive-upload.free.beeceptor.com/"
-            multiple
-            directory-dnd
-            :max="1"
-            :default-upload="false"
-            ref="uploadRef"
-            v-model:file-list="fileListRef"
-            :custom-request="customRequest"
-            @before-upload="beforeUpdate"
-            @change="handleUploadChange"
-            @remove="handleUploadRemove"
+          action="https://naive-upload.free.beeceptor.com/"
+          multiple
+          directory-dnd
+          :max="1"
+          :default-upload="false"
+          ref="uploadRef"
+          v-model:file-list="fileListRef"
+          :custom-request="customRequest"
+          @before-upload="beforeUpdate"
+          @change="handleUploadChange"
+          @remove="handleUploadRemove"
         >
           <n-upload-dragger>
-            <div style="margin-bottom: 12px;padding: 10px;">
+            <div style="margin-bottom: 12px; padding: 10px">
               <n-icon size="48" :depth="3">
                 <Icon>
-                  <UploadOutlined/>
+                  <UploadOutlined />
                 </Icon>
               </n-icon>
             </div>
@@ -59,8 +90,12 @@
             </n-text>
           </n-upload-dragger>
         </n-upload>
-        <div style="width: 100%;text-align: center"
-             v-if="['uploading','finished'].includes((fileListRef[0]||{}).status)">
+        <div
+          style="width: 100%; text-align: center"
+          v-if="
+            ['uploading', 'finished'].includes((fileListRef[0] || {}).status)
+          "
+        >
           <n-gradient-text type="info" size="12">
             {{ (fileListRef[0] || {}).numOfUploaded }}
           </n-gradient-text>
@@ -69,21 +104,25 @@
             {{ (fileListRef[0] || {}).data.byteLength }}
           </n-gradient-text>
         </div>
-        <div style="width: 100%;text-align: center;margin-top: 10px">
+        <div style="width: 100%; text-align: center; margin-top: 10px">
           <n-button
-              text
-              tag="a"
-              target="_blank"
-              type="primary"
-              @click="helpUse=true"
+            text
+            tag="a"
+            target="_blank"
+            type="primary"
+            @click="helpUse = true"
           >
             使用说明
           </n-button>
         </div>
-        <n-button type="primary" style="margin-top: 20px;width: 100%" ghost
-                  v-show="(fileListRef[0]||{}).status==='pending'"
-                  :disabled="!settings.serialPortOpened||!fileListRef.length"
-                  @click="callUpload">
+        <n-button
+          type="primary"
+          style="margin-top: 20px; width: 100%"
+          ghost
+          v-show="(fileListRef[0] || {}).status === 'pending'"
+          :disabled="!settings.serialPortOpened || !fileListRef.length"
+          @click="callUpload"
+        >
           开始上传
         </n-button>
       </div>
@@ -93,67 +132,152 @@
         <div class="tool-bar">
           <n-space>
             <n-space item-style="display: flex;">
-              <n-checkbox label="行号" v-model:checked="settings.showNumOfRow"/>
-              <n-checkbox label="时间" v-model:checked="settings.showTime"/>
-              <n-checkbox label="自动滚屏" v-model:checked="settings.autoScroll"/>
+              <n-checkbox
+                label="行号"
+                v-model:checked="settings.showNumOfRow"
+              />
+              <n-checkbox label="时间" v-model:checked="settings.showTime" />
+              <n-checkbox
+                label="自动滚屏"
+                v-model:checked="settings.autoScroll"
+              />
             </n-space>
           </n-space>
           <n-radio-group v-model:value="settings.receiveCoding" size="small">
-            <n-radio-button :label="coding.label" :value="coding.value" :key="coding.value"
-                            v-for="coding in settings.codingOptions"></n-radio-button>
+            <n-radio-button
+              :label="coding.label"
+              :value="coding.value"
+              :key="coding.value"
+              v-for="coding in settings.codingOptions"
+            ></n-radio-button>
           </n-radio-group>
           <n-space>
-            <div style="width: 200px;display: flex;align-items: center;margin-right: 40px">
-              <div style="width: 50px;color: var(--n-text-form-color)">字体</div>
-              <n-slider v-model:value="settings.fontSize" :step="1" :min="10" :max="40"
-                        @update:value="updateNumOfRow()"></n-slider>
+            <div
+              style="
+                width: 200px;
+                display: flex;
+                align-items: center;
+                margin-right: 40px;
+              "
+            >
+              <div style="width: 50px; color: var(--n-text-form-color)">
+                字体
+              </div>
+              <n-slider
+                v-model:value="settings.fontSize"
+                :step="1"
+                :min="10"
+                :max="40"
+                @update:value="updateNumOfRow()"
+              ></n-slider>
             </div>
-            <n-button type="error" dashed size="small" @click="communications.receive=[];settings.numOfRow=0">清空
+            <n-button
+              type="error"
+              dashed
+              size="small"
+              @click="
+                communications.receive = [];
+                settings.numOfRow = 0;
+              "
+              >清空
             </n-button>
           </n-space>
         </div>
-        <n-scrollbar style="display: flex;" ref="receiveScroll">
-          <div style="display: flex;">
-
-            <div v-show="settings.showNumOfRow"
-                 style="padding: 6px 6px;box-sizing: border-box;background-color: var(--vt-c-bg-card);position: absolute;top: 0;left: 0;height: 100%;border-radius: 8px;opacity: 0.6">
-              <div style="opacity: 0" :style="{'font-size':`${settings.fontSize}px`}">{{ settings.numOfRow }}</div>
+        <n-scrollbar style="display: flex" ref="receiveScroll">
+          <div style="display: flex">
+            <div
+              v-show="settings.showNumOfRow"
+              style="
+                padding: 6px 6px;
+                box-sizing: border-box;
+                background-color: var(--vt-c-bg-card);
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                border-radius: 8px;
+                opacity: 0.6;
+              "
+            >
+              <div
+                style="opacity: 0"
+                :style="{ 'font-size': `${settings.fontSize}px` }"
+              >
+                {{ settings.numOfRow }}
+              </div>
             </div>
 
-            <div v-show="settings.showNumOfRow"
-                 style="padding: 6px 6px;">
-              <div v-for="item in settings.numOfRow" :key="item" style="text-align: right"
-                   :style="{'line-height':`${settings.fontSize+(22-14)}px`,'font-size':`${settings.fontSize}px`}">
+            <div v-show="settings.showNumOfRow" style="padding: 6px 6px">
+              <div
+                v-for="item in settings.numOfRow"
+                :key="item"
+                style="text-align: right"
+                :style="{
+                  'line-height': `${settings.fontSize + (22 - 14)}px`,
+                  'font-size': `${settings.fontSize}px`,
+                }"
+              >
                 {{ item }}
               </div>
             </div>
 
-            <div style="padding: 6px 15px 6px 10px;">
-              <div style="position: fixed;left: 0;right: 0;top: 0;bottom: 0;background-color: rgba(0, 0, 0, .4);"
-                   class="n-modal-mask" v-if="communications.showData.show" @click="clickHex(false)"></div>
-              <n-popover :show="communications.showData.show" :x="communications.showData.x"
-                         :y="communications.showData.y" trigger="manual">
-                <div style="text-align: center;font-family:  monospace;letter-spacing: 2px;">
+            <div style="padding: 6px 15px 6px 10px">
+              <div
+                style="
+                  position: fixed;
+                  left: 0;
+                  right: 0;
+                  top: 0;
+                  bottom: 0;
+                  background-color: rgba(0, 0, 0, 0.4);
+                "
+                class="n-modal-mask"
+                v-if="communications.showData.show"
+                @click="clickHex(false)"
+              ></div>
+              <n-popover
+                :show="communications.showData.show"
+                :x="communications.showData.x"
+                :y="communications.showData.y"
+                trigger="manual"
+              >
+                <div
+                  style="
+                    text-align: center;
+                    font-family: monospace;
+                    letter-spacing: 2px;
+                  "
+                >
                   <n-list hoverable clickable>
-                    <n-list-item @click="copy(communications.showData.content.hex)">
+                    <n-list-item
+                      @click="copy(communications.showData.content.hex)"
+                    >
                       <div class="hex-show">
                         <div>十六进制：</div>
                         <div>{{ communications.showData.content.hex }}</div>
                       </div>
                     </n-list-item>
-                    <n-list-item @click="copy(communications.showData.content.binary)">
+                    <n-list-item
+                      @click="copy(communications.showData.content.binary)"
+                    >
                       <div class="hex-show">
                         <div>二进制：</div>
                         <div>{{ communications.showData.content.binary }}</div>
                       </div>
                     </n-list-item>
-                    <n-list-item @click="copy(communications.showData.content.octonary)">
+                    <n-list-item
+                      @click="copy(communications.showData.content.octonary)"
+                    >
                       <div class="hex-show">
                         <div>八进制：</div>
-                        <div>{{ communications.showData.content.octonary }}</div>
+                        <div>
+                          {{ communications.showData.content.octonary }}
+                        </div>
                       </div>
                     </n-list-item>
-                    <n-list-item @click="copy(communications.showData.content.decimal)">
+                    <n-list-item
+                      @click="copy(communications.showData.content.decimal)"
+                    >
                       <div class="hex-show">
                         <div>十进制：</div>
                         <div>{{ communications.showData.content.decimal }}</div>
@@ -163,17 +287,31 @@
                   </n-list>
                 </div>
               </n-popover>
-              <div class="receive-data" @click="clickHex"
-                   :style="{'word-break': settings.receiveCoding!=='HEX'?'break-all':'','line-height':`${settings.fontSize+(22-14)}px`,'font-size':`${settings.fontSize}px`}"
-                   v-html="displayReceiveData">
-              </div>
+              <div
+                class="receive-data"
+                @click="clickHex"
+                :style="{
+                  'word-break':
+                    settings.receiveCoding !== 'HEX' ? 'break-all' : '',
+                  'line-height': `${settings.fontSize + (22 - 14)}px`,
+                  'font-size': `${settings.fontSize}px`,
+                }"
+                v-html="displayReceiveData"
+              ></div>
             </div>
-
           </div>
         </n-scrollbar>
         <div style="position: relative">
           <div
-              style="display: flex;justify-content: space-between;position: absolute;left: 0;right: 0  ;bottom: -36px;">
+            style="
+              display: flex;
+              justify-content: space-between;
+              position: absolute;
+              left: 0;
+              right: 0;
+              bottom: -36px;
+            "
+          >
             <b>RX : {{ computingRX }} Bytes</b>
             <b>TX : {{ computingTX }} Bytes</b>
           </div>
@@ -181,94 +319,159 @@
       </div>
       <div class="page-right-bottom">
         <div class="send-content">
-          <n-input type="textarea" placeholder="Some thing.."
-                   :autosize="{minRows: 7,maxRows:7}"
-                   :status="communications.send.status" clearable show-count
-                   round :allow-input="v=>(v[v.length-1||0]!=='\n'||pressedKey.backspace)"
-                   v-model:value="communications.send.text" @keyup="sendKeyup"
-                   @keydown="sendKeydown"/>
+          <n-input
+            type="textarea"
+            placeholder="Some thing.."
+            :autosize="{ minRows: 7, maxRows: 7 }"
+            :status="communications.send.status"
+            clearable
+            show-count
+            round
+            :allow-input="
+              (v) => v[v.length - 1 || 0] !== '\n' || pressedKey.backspace
+            "
+            v-model:value="communications.send.text"
+            @keyup="sendKeyup"
+            @keydown="sendKeydown"
+          />
         </div>
         <div class="send-tool">
-          <div style="display: flex;align-items: center;gap: 10px">
-            <div style="display: flex;gap: 6px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div style="display: flex; gap: 6px">
               <div>循环发送</div>
-              <n-switch v-model:value="settings.intervalSend.enable"
-                        @update:value="()=>{
-                          if(settings.intervalSend.enable) settings.intervalSend.time = settings.intervalSend.lastTime;
-                          else {settings.intervalSend.lastTime=settings.intervalSend.time;settings.intervalSend.time = null;}
-                        }"></n-switch>
+              <n-switch
+                v-model:value="settings.intervalSend.enable"
+                @update:value="
+                  () => {
+                    if (settings.intervalSend.enable)
+                      settings.intervalSend.time =
+                        settings.intervalSend.lastTime;
+                    else {
+                      settings.intervalSend.lastTime =
+                        settings.intervalSend.time;
+                      settings.intervalSend.time = null;
+                    }
+                  }
+                "
+              ></n-switch>
             </div>
-            <n-input-number :placeholder="settings.intervalSend.lastTime+''" size="small" style="width: 100px"
-                            :show-button="false"
-                            v-model:value="settings.intervalSend.time"
-                            @update:value="settings.intervalSend.lastTime=settings.intervalSend.time"
-                            @blur="()=>{if(!settings.intervalSend.enable) settings.intervalSend.time=null}">
+            <n-input-number
+              :placeholder="settings.intervalSend.lastTime + ''"
+              size="small"
+              style="width: 100px"
+              :show-button="false"
+              v-model:value="settings.intervalSend.time"
+              @update:value="
+                settings.intervalSend.lastTime = settings.intervalSend.time
+              "
+              @blur="
+                () => {
+                  if (!settings.intervalSend.enable)
+                    settings.intervalSend.time = null;
+                }
+              "
+            >
               <template #suffix>ms</template>
             </n-input-number>
           </div>
           <n-space>
             <n-radio-group v-model:value="settings.sendCoding" size="small">
-              <n-radio-button :label="coding.label" :value="coding.value" :key="coding.value"
-                              v-for="coding in settings.codingOptions"></n-radio-button>
+              <n-radio-button
+                :label="coding.label"
+                :value="coding.value"
+                :key="coding.value"
+                v-for="coding in settings.codingOptions"
+              ></n-radio-button>
             </n-radio-group>
           </n-space>
 
-          <div style="display: flex;align-items: center;gap: 10px">
-            <div style="display: flex;gap: 6px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div style="display: flex; gap: 6px">
               <div>结尾</div>
-              <n-switch v-model:value="settings.endAppend.enable"
-                        @update:value="()=>{
-                          if(settings.endAppend.enable) settings.endAppend.wrap = settings.endAppend.wrap || '\n';
-                          else settings.endAppend.wrap = null;
-                          if(!settings.endAppend.enable)message.warning('在使用C语言的scanf函数时，关闭结尾换行符可能会导致scanf一直阻塞！⚠️⚠️⚠️');
-                        }"></n-switch>
+              <n-switch
+                v-model:value="settings.endAppend.enable"
+                @update:value="
+                  () => {
+                    if (settings.endAppend.enable)
+                      settings.endAppend.wrap = settings.endAppend.wrap || '\n';
+                    else settings.endAppend.wrap = null;
+                    if (!settings.endAppend.enable)
+                      message.warning(
+                        '在使用C语言的scanf函数时，关闭结尾换行符可能会导致scanf一直阻塞！⚠️⚠️⚠️',
+                      );
+                  }
+                "
+              ></n-switch>
             </div>
-            <n-select :placeholder="settings.endAppendOptions[2].label" :options="settings.endAppendOptions"
-                      style="width: 120px" size="small"
-                      v-model:value="settings.endAppend.wrap"/>
-            <n-button @click="writeData()">发送(Enter)
-            </n-button>
+            <n-select
+              :placeholder="settings.endAppendOptions[2].label"
+              :options="settings.endAppendOptions"
+              style="width: 120px"
+              size="small"
+              v-model:value="settings.endAppend.wrap"
+            />
+            <n-button @click="writeData()">发送(Enter) </n-button>
           </div>
         </div>
       </div>
     </div>
 
-
-    <n-modal v-model:show="helpUse" preset="dialog"
-             title="使用说明"
-             style="width: 800px;"
-             negative-text="关 闭">
+    <n-modal
+      v-model:show="helpUse"
+      preset="dialog"
+      title="使用说明"
+      style="width: 800px"
+      negative-text="关 闭"
+    >
       <h1 style="text-align: center">串口文件传输使用说明</h1>
       <n-alert type="info">
-        由于在学习LCD显示UTF8中文时，单片机 FLASH 中的字库在之前被误删了，百度了很久还是找不到一个简单方便的方法，所以自己写了一个。
+        由于在学习LCD显示UTF8中文时，单片机 FLASH
+        中的字库在之前被误删了，百度了很久还是找不到一个简单方便的方法，所以自己写了一个。
       </n-alert>
       <n-alert type="warning" style="margin-top: 10px">
         如果长时间进度卡在一个地方，可能是因为数据校验失败导致进入了死循环
       </n-alert>
-      <h2>
-        串口文件传输之前需要在单片机的增加一些代码来配合
-      </h2>
-      <div style="font-size: 18px;margin: 10px 0">以下是一个示例，和您的串口/SPI/FLASH的配置/函数名可能有些不同，替换成对应功能的函数即可</div>
+      <h2>串口文件传输之前需要在单片机的增加一些代码来配合</h2>
+      <div style="font-size: 18px; margin: 10px 0">
+        以下是一个示例，和您的串口/SPI/FLASH的配置/函数名可能有些不同，替换成对应功能的函数即可
+      </div>
       <n-card title="main.c">
         <template #header-extra>
           <n-popover>
             <template #trigger>
-              <n-icon size="16" style="cursor: pointer;" class="active-green" @click="copyTransferCode(transferMatchCode)">
-                <copy-outline/>
+              <n-icon
+                size="16"
+                style="cursor: pointer"
+                class="active-green"
+                @click="copyTransferCode(transferMatchCode)"
+              >
+                <copy-outline />
               </n-icon>
             </template>
             <span>复制代码</span>
           </n-popover>
         </template>
-        <n-code word-wrap :code="transferMatchCode" language="c" show-line-numbers/>
+        <n-code
+          word-wrap
+          :code="transferMatchCode"
+          language="c"
+          show-line-numbers
+        />
       </n-card>
     </n-modal>
   </div>
-
 </template>
 
 <script setup>
-import {computed, nextTick, onBeforeMount, onBeforeUnmount, reactive, ref, watch} from 'vue'
+import {
+  computed,
+  nextTick,
+  onBeforeMount,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import {
   NButton,
   NCheckbox,
@@ -294,76 +497,80 @@ import {
   NModal,
   NCard,
   NCode,
-  NAlert
-} from 'naive-ui';
-import {UploadOutlined} from '@vicons/antd';
-import {CopyOutline} from '@vicons/ionicons5'
-import {Icon} from '@vicons/utils'
-import dayjs from 'dayjs';
-import iconv from 'iconv-lite'
-import {clipboard} from 'electron';
-import {autoDetect} from '@serialport/bindings-cpp' //这就是Node-SerialPort与底层系统通信的方式。默认情况下，我们会自动检测Windows，Linux和OSX（大多数地方都调用OSX），并为您的系统加载适当的模块。
+  NAlert,
+} from "naive-ui";
+import { UploadOutlined } from "@vicons/antd";
+import { CopyOutline } from "@vicons/ionicons5";
+import { Icon } from "@vicons/utils";
+import dayjs from "dayjs";
+import iconv from "iconv-lite";
+import { clipboard } from "electron";
+import { autoDetect } from "@serialport/bindings-cpp"; //这就是Node-SerialPort与底层系统通信的方式。默认情况下，我们会自动检测Windows，Linux和OSX（大多数地方都调用OSX），并为您的系统加载适当的模块。
 
 // eslint-disable-next-line no-unused-vars
 const message = window.$message;
 
-const Binding = autoDetect();// 返回自动返回对应平台的初始化接口:  DarwinBindingInterface | WindowsBindingInterface | LinuxBindingInterface
+const Binding = autoDetect(); // 返回自动返回对应平台的初始化接口:  DarwinBindingInterface | WindowsBindingInterface | LinuxBindingInterface
 
 const settings = reactive({
   derives: [],
   BaudRateOptions: [
-    300, 1200, 2400, 4800, 9600, 14400, 19200, 28800,
-    38400, 57600, 74880, 115200, 230400,
-  ].map(v => ({label: v, value: v})),
+    300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 74880,
+    115200, 230400,
+  ].map((v) => ({ label: v, value: v })),
   parityOptions: [
-    {label: 'None(无)', value: 'Node'},
-    {label: 'Odd(奇)', value: 'Odd'},
-    {label: 'Even(偶)', value: 'Even'}
+    { label: "None(无)", value: "Node" },
+    { label: "Odd(奇)", value: "Odd" },
+    { label: "Even(偶)", value: "Even" },
   ],
   stopBitsOptions: [
-    {label: 1, value: 1},
-    {label: 2, value: 2},
+    { label: 1, value: 1 },
+    { label: 2, value: 2 },
   ],
   dataBitsOptions: [
-    {label: 5, value: 5},
-    {label: 6, value: 6},
-    {label: 7, value: 7},
-    {label: 8, value: 8},
+    { label: 5, value: 5 },
+    { label: 6, value: 6 },
+    { label: 7, value: 7 },
+    { label: 8, value: 8 },
   ],
   codingOptions: [
-    {label: 'ASCII', value: 'ASCII'},
-    {label: 'HEX', value: 'HEX'},
-    {label: 'UTF-8', value: 'UTF-8'},
-    {label: 'GBK', value: 'GBK'},
+    { label: "ASCII", value: "ASCII" },
+    { label: "HEX", value: "HEX" },
+    { label: "UTF-8", value: "UTF-8" },
+    { label: "GBK", value: "GBK" },
   ],
   endAppendOptions: [
-    {label: 'CRLF(\\r\\n)', value: '\r\n'},
-    {label: 'CR(\\r)', value: '\r'},
-    {label: 'LF(\\n)', value: '\n'},
-    {label: 'LF2(\\n\\n)', value: '\n\n'},
+    { label: "CRLF(\\r\\n)", value: "\r\n" },
+    { label: "CR(\\r)", value: "\r" },
+    { label: "LF(\\n)", value: "\n" },
+    { label: "LF2(\\n\\n)", value: "\n\n" },
   ],
-  serialPort: undefined,                           // 串口
-  serialPortOpened: false,                         // 串口已打开
-  baudRate: 115200,                                // 波特率
-  parity: 'None',                                  // 校验位
-  stopBits: 1,                                     // 停止位
-  dataBits: 8,                                     // 数据位
-  fontSize: 14,                                    // 字体大小
-  sendCoding: 'UTF-8',                             // 发送编码
-  receiveCoding: 'UTF-8',                          // 接收编码
-  showNumOfRow: true,                              // 显示行号
-  numOfRow: 0,                                     // 行数
-  showTime: true,                                  // 显示时间
-  autoScroll: true,                                // 自动滚动
-  intervalSend: {enable: false, time: undefined, lastTime: 500, intervalId: undefined},  // 循环发送
-  endAppend: {enable: true, wrap: '\n'},     // 结尾
-})
-
+  serialPort: undefined, // 串口
+  serialPortOpened: false, // 串口已打开
+  baudRate: 115200, // 波特率
+  parity: "None", // 校验位
+  stopBits: 1, // 停止位
+  dataBits: 8, // 数据位
+  fontSize: 14, // 字体大小
+  sendCoding: "UTF-8", // 发送编码
+  receiveCoding: "UTF-8", // 接收编码
+  showNumOfRow: true, // 显示行号
+  numOfRow: 0, // 行数
+  showTime: true, // 显示时间
+  autoScroll: true, // 自动滚动
+  intervalSend: {
+    enable: false,
+    time: undefined,
+    lastTime: 500,
+    intervalId: undefined,
+  }, // 循环发送
+  endAppend: { enable: true, wrap: "\n" }, // 结尾
+});
 
 const communications = reactive({
   send: {
-    text: '',
-    txBytes: '',
+    text: "",
+    txBytes: "",
     status: undefined,
   },
   receive: [],
@@ -372,9 +579,9 @@ const communications = reactive({
     x: 0,
     y: 0,
     element: undefined,
-    content: '',
-  }
-})
+    content: "",
+  },
+});
 
 const transferMatchCode = `
 #include "stm32f4xx.h"
@@ -509,49 +716,48 @@ void receiveFile() {
 `;
 
 const uploadRef = ref(0);
-const fileListRef = ref([])
+const fileListRef = ref([]);
 const helpUse = ref(false);
 
 const callUpload = () => {
   uploadRef.value?.submit();
-}
+};
 
-const customRequest = async (options) => {
+const customRequest = async () => {
   const file = fileListRef.value[0];
-  const data = (fileListRef.value[0] || {}).data
+  const data = (fileListRef.value[0] || {}).data;
   if (!data) {
-    message.warning('请先选择文件再上传');
+    message.warning("请先选择文件再上传");
   }
   await closeSerialPort();
   await openSerialPort(false);
 
-  const startCmd = [0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA];
+  const startCmd = [0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa];
   const endCmd = [0x11, 0x33, 0x11, 0x44, 0x55, 0x22, 0x00, 0x99, 0x99, 0x99];
   const buff = Buffer.alloc(32, 0, "binary");
 
   let timeout = setTimeout(async () => {
-    message.error('建立连接超时！请查看使用说明')
+    message.error("建立连接超时！请查看使用说明");
     await closeSerialPort();
     await openSerialPort(true);
   }, 300);
   // 连接
   for (let i = 0; i < startCmd.length; i++) {
     await port.write(Buffer.of(startCmd[i]));
-    const {buffer} = await port.read(buff, 0, 1);
+    const { buffer } = await port.read(buff, 0, 1);
     console.log(buffer);
     if (buffer[0] !== startCmd[i]) {
-      message.error('建立连接失败！请查看使用说明');
+      message.error("建立连接失败！请查看使用说明");
       readData().then();
       return;
     }
   }
   clearTimeout(timeout);
 
-
   // 传输
   file.percentage = 0;
-  file.status = 'uploading';
-  console.log('文件大小：', data.byteLength);
+  file.status = "uploading";
+  console.log("文件大小：", data.byteLength);
   for (let i = 0; i < data.byteLength; i++) {
     //取消传输
     if (!fileListRef.value[0]) {
@@ -560,7 +766,7 @@ const customRequest = async (options) => {
     await port.write(Buffer.of(data.getUint8(i)));
     await port.read(buff, 0, 32);
     file.numOfUploaded = i + 1;
-    file.percentage = Math.ceil((file.numOfUploaded / data.byteLength) * 100)
+    file.percentage = Math.ceil((file.numOfUploaded / data.byteLength) * 100);
   }
 
   // 完成
@@ -568,53 +774,50 @@ const customRequest = async (options) => {
     await port.write(Buffer.of(endCmd[i]));
     await port.read(buff, 0, 32);
   }
-  file.status = 'finished';
+  file.status = "finished";
 
   // 继续监听
   await port.flush();
   readData().then();
-}
+};
 
 const handleUploadChange = (data) => {
-  fileListRef.value = data.fileList
-}
-const handleUploadRemove = ({file}) => {
+  fileListRef.value = data.fileList;
+};
+const handleUploadRemove = () => {
   return true;
-}
+};
 
 const beforeUpdate = (options) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const fileReader = new FileReader();
-    fileReader.onload = async res => {
+    fileReader.onload = async (res) => {
       const data = new DataView(res.target.result);
       if (data.byteLength === 0) {
-        message.warning('文件内容不能为空');
+        message.warning("文件内容不能为空");
         resolve(false);
         return;
       }
       resolve(true);
       options.file.data = data;
-    }
+    };
     fileReader.readAsArrayBuffer(options.file.file);
-  })
+  });
 };
 
-
 const openSerialPortAllow = computed(() => {
-  const {serialPort, baudRate, parity, stopBits, dataBits} = settings;
+  const { serialPort, baudRate, parity, stopBits, dataBits } = settings;
   return serialPort && baudRate && parity && stopBits && dataBits;
-})
+});
 
 const getSerialPort = async () => {
-  settings.derives = (await Binding.list()).map(res => ({
-    label: res.path.substring(res.path.lastIndexOf('/') + 1),
-    value: res.path
+  settings.derives = (await Binding.list()).map((res) => ({
+    label: res.path.substring(res.path.lastIndexOf("/") + 1),
+    value: res.path,
   }));
-}
-
+};
 
 let port = undefined;
-
 
 /**
  * 引脚 定义 符号
@@ -639,59 +842,61 @@ const openSerialPort = async (readEnable = true) => {
   if (settings.serialPortOpened) return closeSerialPort();
   try {
     port = await Binding.open({
-      path: settings.serialPort,        // 串口路径
-      baudRate: settings.baudRate,      // 波特率
-      dataBits: settings.dataBits,      // 数据位
-      stopBits: settings.stopBits,      // 停止位
-      parity: settings.parity,          // 校验位：奇偶校验
-      lock: true,                       // 防止其他进程打开端口。Windows目前不支持false。默认为true
-      rtscts: false,                    // 流控制设置。默认为false
-      xon: false,                       // 流控制设置。默认为false
-      xoff: false,                      // 流控制设置。默认为false
-      xany: false,                      // 流控制设置。默认为false
-      hupcl: true,                      // 关闭DTR。默认为true
-      vmin: 1,                          // 默认为1。读取到一个数据返回
-      vtime: 0,                         // 默认为0。否则阻塞等待
+      path: settings.serialPort, // 串口路径
+      baudRate: settings.baudRate, // 波特率
+      dataBits: settings.dataBits, // 数据位
+      stopBits: settings.stopBits, // 停止位
+      parity: settings.parity, // 校验位：奇偶校验
+      lock: true, // 防止其他进程打开端口。Windows目前不支持false。默认为true
+      rtscts: false, // 流控制设置。默认为false
+      xon: false, // 流控制设置。默认为false
+      xoff: false, // 流控制设置。默认为false
+      xany: false, // 流控制设置。默认为false
+      hupcl: true, // 关闭DTR。默认为true
+      vmin: 1, // 默认为1。读取到一个数据返回
+      vtime: 0, // 默认为0。否则阻塞等待
     });
   } catch (e) {
-    message.error('串口打开失败！请确认串口是否已经连接～');
+    message.error("串口打开失败！请确认串口是否已经连接～");
     return;
   }
 
-  port.set({dtr: false});
+  port.set({ dtr: false });
 
   if (!port.isOpen) {
     port = undefined;
     settings.serialPortOpened = false;
-    window.$message.error('串口打开失败！可能被其它程序占用了。。。');
+    window.$message.error("串口打开失败！可能被其它程序占用了。。。");
     return;
   }
   settings.serialPortOpened = true;
   if (readEnable) readData().then();
-}
+};
 
 const closeSerialPort = async () => {
   if (port && port.isOpen) await port.close();
   port = undefined;
   settings.serialPortOpened = false;
-}
+};
 
 let readImmediateId = undefined;
 const readData = async () => {
   let data;
   const buff = Buffer.alloc(32, 0, "binary");
-  let index = communications.receive.length ? communications.receive.length - 1 : 0;
+  let index = communications.receive.length
+    ? communications.receive.length - 1
+    : 0;
 
   // eslint-disable-next-line no-constant-condition
   const readImmediate = async () => {
     try {
-      let {buffer, bytesRead} = await port.read(buff, 0, 32);
+      let { buffer, bytesRead } = await port.read(buff, 0, 32);
       // console.log(buffer);
       // 如果没有接收到过数据，或者上一次接收的数据是发送的，或者上一次接收的数据已经超过1s，则新建一个接收记录
       if (
-          communications.receive.length === 0 ||
-          communications.receive[communications.receive.length - 1].isSend ||
-          communications.receive[communications.receive.length - 1].datetime <
+        communications.receive.length === 0 ||
+        communications.receive[communications.receive.length - 1].isSend ||
+        communications.receive[communications.receive.length - 1].datetime <
           new Date().getTime() - 1000
       ) {
         index = communications.receive.length;
@@ -724,73 +929,94 @@ const readData = async () => {
     if (readImmediateId) {
       readImmediateId = setImmediate(readImmediate);
     }
-  }
+  };
   // 开始执行setImmediate
   readImmediateId = setImmediate(readImmediate);
 };
 
-
 const convertBinary = (data) => {
   return {
-    'ASCII': data.toString('ASCII').replace(/</g, "&lt;").replace(/>/g, "&gt;"),
-    'HEX': data.toString('HEX').toUpperCase().replace(/(.{2})/g, '<span class="HEX" style="cursor: pointer">$1</span> '),
-    'UTF-8': data.toString('UTF-8'),
-    'GBK': new TextDecoder('GBK').decode(data),
-  }
+    ASCII: data.toString("ASCII").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+    HEX: data
+      .toString("HEX")
+      .toUpperCase()
+      .replace(
+        /(.{2})/g,
+        '<span class="HEX" style="cursor: pointer">$1</span> ',
+      ),
+    "UTF-8": data.toString("UTF-8"),
+    GBK: new TextDecoder("GBK").decode(data),
+  };
 };
 
 const displayReceiveData = computed(() => {
   let data = communications.receive;
-  if (!data.length) return '';
-  let content = '';
-  if (settings.showTime) data.forEach(v => {
-    if (!v?.isSend) content += `<span style="color: red">「${dayjs(v.datetime).format('YYYY-MM-DD HH:mm:ss')}」</span>${v[settings.receiveCoding]}\n`;
-    else content += `<span style="color: #2a947d"><span style="color: red">「${dayjs(v.datetime).format('YYYY-MM-DD HH:mm:ss')}」</span>${v[settings.receiveCoding]}\n</span>`;
-  });
-  else data.forEach(v => {
-    if (!v?.isSend) content += `${v[settings.receiveCoding]}\n`
-    else content += `<span style="color: #2a947d">${v[settings.receiveCoding]}\n</span>`
-  });
+  if (!data.length) return "";
+  let content = "";
+  if (settings.showTime)
+    data.forEach((v) => {
+      if (!v?.isSend)
+        content += `<span style="color: red">「${dayjs(v.datetime).format("YYYY-MM-DD HH:mm:ss")}」</span>${v[settings.receiveCoding]}\n`;
+      else
+        content += `<span style="color: #2a947d"><span style="color: red">「${dayjs(v.datetime).format("YYYY-MM-DD HH:mm:ss")}」</span>${v[settings.receiveCoding]}\n</span>`;
+    });
+  else
+    data.forEach((v) => {
+      if (!v?.isSend) content += `${v[settings.receiveCoding]}\n`;
+      else
+        content += `<span style="color: #2a947d">${v[settings.receiveCoding]}\n</span>`;
+    });
   nextTick(() => updateNumOfRow());
   return content;
-})
+});
 window.onresize = () => updateNumOfRow();
 
 const receiveScroll = ref();
-const updateNumOfRow = () => nextTick(() => {
-  settings.numOfRow = Math.ceil(document.querySelector('.receive-data').offsetHeight / (settings.fontSize + (22 - 14)));
-  if (settings.autoScroll) {
-    receiveScroll.value.scrollBy({top: document.querySelector('.receive-data').offsetHeight/*, behavior: 'smooth'*/})
-  }
-});
+const updateNumOfRow = () =>
+  nextTick(() => {
+    settings.numOfRow = Math.ceil(
+      document.querySelector(".receive-data").offsetHeight /
+        (settings.fontSize + (22 - 14)),
+    );
+    if (settings.autoScroll) {
+      receiveScroll.value.scrollBy({
+        top: document.querySelector(".receive-data")
+          .offsetHeight /*, behavior: 'smooth'*/,
+      });
+    }
+  });
 
 const computingRX = computed(() => {
   let total = 0;
-  communications.receive.filter(v => !v.isSend).forEach(v => total += v.data.length);
+  communications.receive
+    .filter((v) => !v.isSend)
+    .forEach((v) => (total += v.data.length));
   return total;
 });
 const computingTX = computed(() => {
   let total = 0;
-  communications.receive.filter(v => v.isSend).forEach(v => total += v.data.length);
+  communications.receive
+    .filter((v) => v.isSend)
+    .forEach((v) => (total += v.data.length));
   return total;
 });
 
 const clickHex = (e) => {
   if (e === false) {
     communications.showData.show = false;
-    communications.showData.element.style = 'cursor: pointer;';
+    communications.showData.element.style = "cursor: pointer;";
     return;
   }
   switch (e.target.classList[0]) {
-    case 'HEX':
+    case "HEX":
       // eslint-disable-next-line no-case-declarations
-      const {x, y} = {
+      const { x, y } = {
         x: e.target.getBoundingClientRect().left,
-        y: e.target.getBoundingClientRect().top
-      }
+        y: e.target.getBoundingClientRect().top,
+      };
       communications.showData.show = true;
       e.target.style = `background:#63e2b7;cursor: pointer;`;
-      communications.showData.x = (x + e.target.offsetWidth / 2);
+      communications.showData.x = x + e.target.offsetWidth / 2;
       communications.showData.y = y;
       // eslint-disable-next-line no-case-declarations
       let decimal = parseInt(e.target.innerText, 16);
@@ -798,14 +1024,17 @@ const clickHex = (e) => {
         hex: e.target.innerText,
         decimal: String(decimal),
         octonary: decimal.toString(8),
-        binary: decimal.toString(2).replace(/(.{4})/g, '$1 ').trim(),
+        binary: decimal
+          .toString(2)
+          .replace(/(.{4})/g, "$1 ")
+          .trim(),
       };
       communications.showData.element = e.target;
       return;
     default:
       return;
   }
-}
+};
 
 const pressedKey = reactive({
   shift: false,
@@ -820,52 +1049,57 @@ const sendKeyup = (e) => {
       pressedKey.backspace = false;
       break;
   }
-}
+};
 const sendKeydown = (e) => {
   switch (e.keyCode) {
-    case 16: /* Shift */
+    case 16 /* Shift */:
       pressedKey.shift = true;
       break;
     case 8:
       pressedKey.backspace = true;
       break;
-    case 13: /* Enter */
+    case 13 /* Enter */:
       if (pressedKey.shift) {
-        communications.send.text = (communications.send.text || '') + '\n';
+        communications.send.text = (communications.send.text || "") + "\n";
         return;
       }
       writeData();
       break;
   }
   if (communications.send.text) communications.send.status = undefined;
-}
-
+};
 
 const writeData = async () => {
-  if (!settings.serialPortOpened) return message.warning('串口还未开启～🫣');
-  communications.send.status = communications.send.text ? undefined : 'error';
+  if (!settings.serialPortOpened) return message.warning("串口还未开启～🫣");
+  communications.send.status = communications.send.text ? undefined : "error";
   if (!communications.send.text) return;
   let data, sendData;
+  let num = 0;
   switch (settings.sendCoding) {
-    case 'UTF-8':
+    case "UTF-8":
       data = Buffer.from(communications.send.text);
       break;
-    case 'GBK':
+    case "GBK":
       data = Buffer.from(iconv.encode(communications.send.text, "GBK"));
       break;
-    case 'HEX':
+    case "HEX":
       data = Buffer.from(iconv.encode(communications.send.text, "HEX"));
-      if (!data.length) return message.error('您输入的好像不是 HEX 。。。😨');
-      if (communications.send.text.split('').some(v => (v < '1' || v > '9') && (v < 'A' || v > 'F'))) {
-        message.warning('您可能输入了 HEX 中，但不全是 HEX 。。。😥');
+      if (!data.length) return message.error("您输入的好像不是 HEX 。。。😨");
+      if (
+        communications.send.text
+          .split("")
+          .some((v) => (v < "1" || v > "9") && (v < "A" || v > "F"))
+      ) {
+        message.warning("您可能输入了 HEX 中，但不全是 HEX 。。。😥");
       }
       break;
-    case 'ASCII':
+    case "ASCII":
       data = Buffer.from(iconv.encode(communications.send.text, "ASCII"));
-      let num = 0;
-      data.forEach(v => num = num + (v === 63 ? 1 : 0));
+      data.forEach((v) => (num = num + (v === 63 ? 1 : 0)));
       if (num >= 3) {
-        message.warning('您输入的可能不是ASCII，如果您确认您输入的ASCII，请忽略我～😜');
+        message.warning(
+          "您输入的可能不是ASCII，如果您确认您输入的ASCII，请忽略我～😜",
+        );
       }
       break;
   }
@@ -886,88 +1120,88 @@ const writeData = async () => {
         await port.write(sendData);
         sendDataToDisplay(data);
       }, settings.intervalSend.time);
-    } else communications.send.text = '';
+    } else communications.send.text = "";
   } catch (e) {
-    console.log('writeData------->>>', e)
+    console.log("writeData------->>>", e);
   }
-}
+};
 
 const sendDataToDisplay = (data) => {
   communications.receive[communications.receive.length] = {
     datetime: new Date().getTime(),
     isSend: true,
     data: data,
-    ...convertBinary(data)
-  }
-}
+    ...convertBinary(data),
+  };
+};
 
 // eslint-disable-next-line no-unused-vars
 const copy = (text) => {
   clipboard.writeText(text);
-  message.success('Copy SUCCESS!');
+  message.success("Copy SUCCESS!");
   clickHex(false);
-}
+};
 
-
-const copyTransferCode=(code)=>{
+const copyTransferCode = (code) => {
   clipboard.writeText(code);
-  message.success('复制成功');
+  message.success("复制成功");
   helpUse.value = false;
-}
+};
 
 const rememberSettings = () => {
   const {
-    serialPort,       // 串口
-    baudRate,         // 波特率
-    parity,           // 校验位
-    stopBits,         // 停止位
-    dataBits,         // 数据位
-    fontSize,         // 字体大小
-    sendCoding,       // 发送编码
-    receiveCoding,    // 接收编码
-    showNumOfRow,     // 显示行号
-    showTime,         // 显示时间
-    autoScroll,       // 自动滚动
-    intervalSend,     // 定时发送
-    endAppend,        // 结尾附加
+    serialPort, // 串口
+    baudRate, // 波特率
+    parity, // 校验位
+    stopBits, // 停止位
+    dataBits, // 数据位
+    fontSize, // 字体大小
+    sendCoding, // 发送编码
+    receiveCoding, // 接收编码
+    showNumOfRow, // 显示行号
+    showTime, // 显示时间
+    autoScroll, // 自动滚动
+    intervalSend, // 定时发送
+    endAppend, // 结尾附加
   } = settings;
-  localStorage.setItem('SerialPortSettings', JSON.stringify({
-    serialPort,       // 串口
-    baudRate,         // 波特率
-    parity,           // 校验位
-    stopBits,         // 停止位
-    dataBits,         // 数据位
-    fontSize,         // 字体大小
-    sendCoding,       // 发送编码
-    receiveCoding,    // 接收编码
-    showNumOfRow,     // 显示行号
-    showTime,         // 显示时间
-    autoScroll,       // 自动滚动
-    intervalSend,     // 定时发送
-    endAppend,        // 结尾附加
-  }))
-}
+  localStorage.setItem(
+    "SerialPortSettings",
+    JSON.stringify({
+      serialPort, // 串口
+      baudRate, // 波特率
+      parity, // 校验位
+      stopBits, // 停止位
+      dataBits, // 数据位
+      fontSize, // 字体大小
+      sendCoding, // 发送编码
+      receiveCoding, // 接收编码
+      showNumOfRow, // 显示行号
+      showTime, // 显示时间
+      autoScroll, // 自动滚动
+      intervalSend, // 定时发送
+      endAppend, // 结尾附加
+    }),
+  );
+};
 
-watch(settings, (newVal, oldValue) => {
+watch(settings, () => {
   rememberSettings();
-})
-
+});
 
 const recoverSettings = () => {
-  let recover = JSON.parse(localStorage.getItem('SerialPortSettings') || '{}');
-  Object.keys(recover).forEach(key => settings[key] = recover[key]);
-}
+  let recover = JSON.parse(localStorage.getItem("SerialPortSettings") || "{}");
+  Object.keys(recover).forEach((key) => (settings[key] = recover[key]));
+};
 
 onBeforeMount(async () => {
   recoverSettings();
   await getSerialPort();
-})
+});
 
 onBeforeUnmount(async () => {
   await closeSerialPort();
-})
+});
 </script>
-
 
 <style scoped>
 .page-lift {
@@ -1003,7 +1237,7 @@ onBeforeUnmount(async () => {
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 10px;
-  margin-left: 14px
+  margin-left: 14px;
 }
 
 .page-right {
@@ -1042,7 +1276,6 @@ onBeforeUnmount(async () => {
 .page-right > .page-right-bottom {
   height: 240px;
 }
-
 
 .page-right > .page-right-bottom > .send-content {
   height: calc(100% - 40px);
@@ -1085,7 +1318,7 @@ onBeforeUnmount(async () => {
   white-space: pre-wrap;
 }
 
-.active-green:active{
+.active-green:active {
   color: #7fe7c4;
 }
 </style>

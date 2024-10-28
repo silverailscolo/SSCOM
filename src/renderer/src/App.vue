@@ -1,11 +1,16 @@
 <template>
-  <n-config-provider :theme-overrides="configs.theme==='dark'?darkThemeOverrides:lightThemeOverrides"
-                     :theme="configs.theme==='dark'?darkTheme:lightTheme" :hljs="hljs">
+  <n-config-provider
+    :theme-overrides="
+      configs.theme === 'dark' ? darkThemeOverrides : lightThemeOverrides
+    "
+    :theme="configs.theme === 'dark' ? darkTheme : lightTheme"
+    :hljs="hljs"
+  >
     <div class="drag-app"></div>
     <n-dialog-provider>
       <n-tabs type="segment" v-model="configs.tabActive">
         <n-tab-pane name="chap1" tab="串口" display-directive="show">
-          <HelloWorld/>
+          <HelloWorld />
         </n-tab-pane>
         <n-tab-pane name="chap2" tab="示波器" display-directive="show:lazy">
           <OtherAbility></OtherAbility>
@@ -13,13 +18,22 @@
         <n-tab-pane name="chap3" tab="设置" display-directive="show:lazy">
           <n-list>
             <n-list-item>
-              <n-thing title="外观" description="浅色模式/深色模式/跟随系统"></n-thing>
+              <n-thing
+                title="外观"
+                description="浅色模式/深色模式/跟随系统"
+              ></n-thing>
               <template #suffix>
-                <div style="width: 300px;display: flex;justify-content: flex-end">
+                <div
+                  style="width: 300px; display: flex; justify-content: flex-end"
+                >
                   <n-space>
                     <n-space>
-                      <n-radio-group v-model:value="configs.themeMode" name="theme"
-                                     @change="themeChange(configs.themeMode)" v-show="configs.themeMode!=='system'">
+                      <n-radio-group
+                        v-model:value="configs.themeMode"
+                        name="theme"
+                        @change="themeChange(configs.themeMode)"
+                        v-show="configs.themeMode !== 'system'"
+                      >
                         <n-space>
                           <n-radio value="light">浅色</n-radio>
                           <n-radio value="dark">深色</n-radio>
@@ -28,9 +42,13 @@
                     </n-space>
                     <n-space>
                       <div>跟随系统</div>
-                      <n-switch v-model="configs.themeMode" :value="configs.themeMode" checked-value="system"
-                                unchecked-value="custom"
-                                @update:value="themeChange"></n-switch>
+                      <n-switch
+                        v-model="configs.themeMode"
+                        :value="configs.themeMode"
+                        checked-value="system"
+                        unchecked-value="custom"
+                        @update:value="themeChange"
+                      ></n-switch>
                     </n-space>
                   </n-space>
                 </div>
@@ -62,104 +80,104 @@ import {
   NTabs,
   NThing,
   createDiscreteApi,
-  NDialogProvider
-} from 'naive-ui'
-import HelloWorld from './components/HelloWorld.vue'
-import OtherAbility from './components/OtherAbility.vue'
-import {computed, reactive} from 'vue'
-import {ipcRenderer} from 'electron'
+  NDialogProvider,
+} from "naive-ui";
+import HelloWorld from "./components/HelloWorld.vue";
+import OtherAbility from "./components/OtherAbility.vue";
+import { computed, reactive } from "vue";
+import { ipcRenderer } from "electron";
 
-const hljs = require('highlight.js/lib/core')
-hljs.registerLanguage('c', require('highlight.js/lib/languages/c'))
+const hljs = require("highlight.js/lib/core");
+hljs.registerLanguage("c", require("highlight.js/lib/languages/c"));
 
 const lightThemeOverrides = {
   common: {
-    placeholderColor: '#EEE',
-    buttonBorderColor: 'red'
+    placeholderColor: "#EEE",
+    buttonBorderColor: "red",
   },
   List: {
-    color: '#00000000'
+    color: "#00000000",
   },
   Input: {
-    color: 'rgba(0,0,0,0.1)',
-    colorFocus: 'rgba(0,0,0,0.2)',
-    border: '#aaa'
+    color: "rgba(0,0,0,0.1)",
+    colorFocus: "rgba(0,0,0,0.2)",
+    border: "#aaa",
   },
   Checkbox: {
-    color: 'rgba(0,0,0,0.1)',
-    colorFocus: 'rgba(0,0,0,0.2)',
-    border: '#aaa'
+    color: "rgba(0,0,0,0.1)",
+    colorFocus: "rgba(0,0,0,0.2)",
+    border: "#aaa",
   },
   Radio: {
-    buttonColorActive: 'rgba(0,0,0,0.0)',
-    buttonBorderColor: '#aaa'
+    buttonColorActive: "rgba(0,0,0,0.0)",
+    buttonBorderColor: "#aaa",
   },
   Select: {
-    border: '#aaa',
+    border: "#aaa",
     peers: {
       InternalSelection: {
-        color: 'rgba(0,0,0,0.1)',
-        colorActive: 'rgba(0,0,0,0.2)',
-        border: '#aaa'
-      }
-    }
+        color: "rgba(0,0,0,0.1)",
+        colorActive: "rgba(0,0,0,0.2)",
+        border: "#aaa",
+      },
+    },
   },
   Tabs: {
-    colorSegment: 'rgba(0,0,0,0.08)',
-    tabColorSegment: 'rgba(255,255,255,0.6)',
-  }
-}
+    colorSegment: "rgba(0,0,0,0.08)",
+    tabColorSegment: "rgba(255,255,255,0.6)",
+  },
+};
 
 const darkThemeOverrides = {
   List: {
-    color: '#00000000'
+    color: "#00000000",
   },
   Input: {
-    color: 'rgba(255,255,255,0.1)'
-  }
-}
+    color: "rgba(255,255,255,0.1)",
+  },
+};
 
 const configs = reactive({
-  theme: '', // 'light' | 'dark'
-  themeMode: 'system',
-  tabActive: 'chap1',
+  theme: "", // 'light' | 'dark'
+  themeMode: "system",
+  tabActive: "chap1",
 });
 
-let {message} = createDiscreteApi(['message'], {
-  configProviderProps: computed(() => ({theme: configs.theme === 'dark' ? darkTheme : lightTheme})),
+let { message } = createDiscreteApi(["message"], {
+  configProviderProps: computed(() => ({
+    theme: configs.theme === "dark" ? darkTheme : lightTheme,
+  })),
 });
 window.$message = message;
 
 const getCurrentTheme = async () => {
-  return await ipcRenderer.invoke('dark-mode:get') ? 'dark' : 'light';
-}
+  return (await ipcRenderer.invoke("dark-mode:get")) ? "dark" : "light";
+};
 
-ipcRenderer.on('dark-mode:updated', (event, isDark) => {
-  if (configs.themeMode === 'system') {
-    configs.theme = isDark ? 'dark' : 'light';
+ipcRenderer.on("dark-mode:updated", (event, isDark) => {
+  if (configs.themeMode === "system") {
+    configs.theme = isDark ? "dark" : "light";
   }
 });
 
 const themeChange = async (e) => {
   switch (e) {
-    case 'system':
+    case "system":
       configs.theme = await getCurrentTheme();
-      await ipcRenderer.invoke('dark-mode:set', e);
-      configs.themeMode = 'system';
+      await ipcRenderer.invoke("dark-mode:set", e);
+      configs.themeMode = "system";
       break;
-    case 'custom':
+    case "custom":
       configs.theme = configs.themeMode = await getCurrentTheme();
       break;
     default:
       configs.theme = configs.themeMode = e;
-      await ipcRenderer.invoke('dark-mode:set', e);
+      await ipcRenderer.invoke("dark-mode:set", e);
       break;
   }
-  localStorage.setItem('themeMode', e);
-}
-themeChange(localStorage.getItem('themeMode') || 'system')
-
-
+  localStorage.setItem("themeMode", e);
+};
+themeChange(localStorage.getItem("themeMode") || "system");
 </script>
 
 <style>
@@ -194,19 +212,19 @@ themeChange(localStorage.getItem('themeMode') || 'system')
   --vt-c-gray-dark-3: #3a3a3a;
   --vt-c-gray-dark-4: #282828;
   --vt-c-gray-dark-5: #202020;
-  --vt-c-divider-light-1: rgba(60, 60, 60, .29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, .12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, .65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, .48);
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
   --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, .7);
-  --vt-c-text-light-3: rgba(60, 60, 60, .33);
-  --vt-c-text-light-4: rgba(60, 60, 60, .18);
+  --vt-c-text-light-2: rgba(60, 60, 60, 0.7);
+  --vt-c-text-light-3: rgba(60, 60, 60, 0.33);
+  --vt-c-text-light-4: rgba(60, 60, 60, 0.18);
   --vt-c-text-light-code: var(--vt-c-indigo-soft);
-  --vt-c-text-dark-1: rgba(255, 255, 255, .87);
-  --vt-c-text-dark-2: rgba(235, 235, 235, .6);
-  --vt-c-text-dark-3: rgba(235, 235, 235, .38);
-  --vt-c-text-dark-4: rgba(235, 235, 235, .18);
+  --vt-c-text-dark-1: rgba(255, 255, 255, 0.87);
+  --vt-c-text-dark-2: rgba(235, 235, 235, 0.6);
+  --vt-c-text-dark-3: rgba(235, 235, 235, 0.38);
+  --vt-c-text-dark-4: rgba(235, 235, 235, 0.18);
   --vt-c-text-dark-code: var(--vt-c-indigo-light);
   --vt-c-green: #42b883;
   --vt-c-green-light: #42d392;
@@ -242,7 +260,6 @@ themeChange(localStorage.getItem('themeMode') || 'system')
   --n-text-form-color-light: rgb(51, 54, 57);
   --n-text-form-color-disabled-light: rgba(194, 194, 194, 1);
 }
-
 
 :root {
   --vt-c-bg: var(--vt-c-white);
@@ -302,7 +319,11 @@ body {
   }
 }
 
-html, body, #app, .n-config-provider, .n-tabs {
+html,
+body,
+#app,
+.n-config-provider,
+.n-tabs {
   height: 100%;
   box-sizing: border-box;
 }
